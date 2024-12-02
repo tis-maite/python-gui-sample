@@ -12,10 +12,11 @@ class View(customtkinter.CTkFrame):
         self.label = customtkinter.CTkLabel(
             master=master,
             height=5,
+            justify="left",
             text="作成したいアプリケーションについてマークダウン形式で記載してください",
             font=("Arial", 12),
         )
-        self.label.grid(row=1, column=0, pady=(0, 10), sticky="w")
+        self.label.grid(row=0, column=0, padx=0, pady=(0, 10), sticky="w")
 
         self.textbox = customtkinter.CTkTextbox(
             master=master,
@@ -24,18 +25,20 @@ class View(customtkinter.CTkFrame):
             border_width=1,
             border_spacing=1,
         )
-        self.textbox.grid(row=2, column=0, pady=(0, 10), sticky="we")
+        self.textbox.grid(row=1, column=0, padx=0, pady=(0, 10), sticky="we")
 
         self.execButton = customtkinter.CTkButton(
             master=master,
             text="実行",
+            height=10,
             corner_radius=10,
             command=self.on_exec_button_click,
         )
-        self.execButton.grid(row=3, column=0, pady=(0, 20), sticky="w")
+        self.execButton.grid(row=2, column=0, padx=0, pady=(0, 20), sticky="we")
 
-        self.answer = ScrollableAnswer(master=master, fg_color="black")
-        self.answer.grid(row=4, column=0, padx=0, pady=10, sticky="we")
+        self.answer = ScrollableAnswer(master=master, height=340, fg_color="black")
+        self.answer.grid(row=3, column=0, padx=0, pady=0, sticky="we")
+        self.answer._scrollbar.configure(height=0)
 
     def ask_ai(self, input: str) -> str:
         return self.ask_ai_fn(input)
@@ -58,13 +61,10 @@ class ScrollableAnswer(customtkinter.CTkScrollableFrame):
         # add widgets onto the frame...
         self.label = customtkinter.CTkLabel(
             master=self,
-            height=10,
             text="",  # ここにAIの結果を表示する
             justify="left",
             anchor="w",
-            wraplength=500,
-            corner_radius=10,
-            fg_color="black",
+            wraplength=535,
             font=("Arial", 12),
         )
-        self.label.grid(row=0, column=0, padx=0, pady=10, sticky="w")
+        self.label.grid(row=0, column=0, padx=0, pady=0, sticky="we")

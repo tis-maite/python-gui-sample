@@ -1,4 +1,5 @@
 import customtkinter
+from tkhtmlview import HTMLLabel
 
 
 class View(customtkinter.CTkFrame):
@@ -12,10 +13,10 @@ class View(customtkinter.CTkFrame):
         self.label = customtkinter.CTkLabel(
             master=master,
             height=5,
-            text="作成したいアプリケーションについてマークダウン形式で記載してください",
+            text="作成したいアプリケーションを記述してください",
             font=("Arial", 12),
         )
-        self.label.grid(row=1, column=0, pady=(0, 10), sticky="w")
+        self.label.grid(row=0, column=0, pady=(0, 10), sticky="we")
 
         self.textbox = customtkinter.CTkTextbox(
             master=master,
@@ -24,7 +25,7 @@ class View(customtkinter.CTkFrame):
             border_width=1,
             border_spacing=1,
         )
-        self.textbox.grid(row=2, column=0, pady=(0, 10), sticky="we")
+        self.textbox.grid(row=1, column=0, pady=(0, 10), sticky="we")
 
         self.execButton = customtkinter.CTkButton(
             master=master,
@@ -32,10 +33,10 @@ class View(customtkinter.CTkFrame):
             corner_radius=10,
             command=self.on_exec_button_click,
         )
-        self.execButton.grid(row=3, column=0, pady=(0, 20), sticky="w")
+        self.execButton.grid(row=2, column=0, pady=(0, 20), sticky="we")
 
-        self.answer = ScrollableAnswer(master=master, fg_color="black")
-        self.answer.grid(row=4, column=0, padx=0, pady=10, sticky="we")
+        self.answer = ScrollableAnswer(master=master, height=450, fg_color="black")
+        self.answer.grid(row=3, column=0, padx=0, pady=(0, 10), sticky="we")
 
     def ask_ai(self, input: str) -> str:
         return self.ask_ai_fn(input)
@@ -43,7 +44,8 @@ class View(customtkinter.CTkFrame):
     def on_exec_button_click(self):
         input = self.textbox.get("1.0", "end")
         answer = self.ask_ai(input)
-        self.answer.label.configure(text=answer)
+        self.answer.label.set_html(answer)
+        self.answer.label.fit_height()
 
 
 class ScrollableAnswer(customtkinter.CTkScrollableFrame):
@@ -56,15 +58,9 @@ class ScrollableAnswer(customtkinter.CTkScrollableFrame):
         super().__init__(master, **kwargs)
 
         # add widgets onto the frame...
-        self.label = customtkinter.CTkLabel(
+        self.label = HTMLLabel(
             master=self,
-            height=10,
-            text="",  # ここにAIの結果を表示する
-            justify="left",
-            anchor="w",
-            wraplength=500,
-            corner_radius=10,
-            fg_color="black",
-            font=("Arial", 12),
+            html="<h2>hoge</h2>",
         )
-        self.label.grid(row=0, column=0, padx=0, pady=10, sticky="w")
+        self.label.grid(row=0, column=0, padx=0, pady=0, sticky="wens")
+        self.label.fit_height()
